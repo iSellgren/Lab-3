@@ -122,12 +122,29 @@ double linked_list::pop_front()
 // accessing elements
 double linked_list::front() const
 {
-    return head->value;
+    
+    if (head != NULL)
+    {
+        return head->value;
+    }
+    else
+    {
+        return NULL;
+    }
+    
 }
 
 double linked_list::back() const
 {
-    return tail->value;
+    
+    if (tail != NULL)
+    {
+        return tail->value;
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 double & linked_list::operator[](size_t pos)
@@ -138,6 +155,36 @@ double & linked_list::operator[](size_t pos)
     }
     
     return iterator->value;
+}
+
+// removing elements
+void linked_list::remove (size_t pos)
+{
+    node_t *iterator = head;
+    node_t *tmp;
+    
+    if (head != NULL)
+    {
+        for (size_t i = 0; i < pos; i++)
+        {
+            iterator = iterator->next;
+        }
+        
+        if (iterator->prev != NULL)
+        {
+            tmp = iterator->prev;
+            tmp->next = iterator->next;
+        }
+        if (iterator->next != NULL)
+        {
+            tmp = iterator->next;
+            tmp->prev = iterator->prev;
+        }
+        delete iterator;
+        
+        
+    }
+    
 }
 
 // informational
@@ -176,3 +223,25 @@ void linked_list::print_reverse() const
         iterator = iterator->prev;
     }
 }
+
+
+void linked_list::merge(linked_list list1, linked_list list2)
+{
+    node_t *head1, *head2;
+    head1= list1.head;
+    head2= list2.head;
+    
+    while (head1 != NULL && head2 != NULL)
+    {
+        if(head1->value > head2->value)
+        {
+            std::cout << "Test" << std::endl;
+        }
+        else
+        {
+            std::cout << "Test" << std::endl;
+        }
+        
+    }
+}
+

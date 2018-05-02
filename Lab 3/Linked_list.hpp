@@ -13,7 +13,7 @@
 class linked_list{
 public:
     linked_list() = default;
-    linked_list(const linked_list& src);
+   /**/ linked_list(const linked_list& src);
     
   /**/  ~linked_list();
     
@@ -49,6 +49,8 @@ public:
     // output
    /**/ void print() const;
    /**/ void print_reverse() const;
+    //merge
+    void merge(linked_list list1, linked_list list2);
     
 private: struct node_t{
     node_t(double value, node_t* next=0, node_t* prev=0)
