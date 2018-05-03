@@ -13,11 +13,18 @@
 int main() {
     linked_list ll1;
     linked_list ll2;
+    for (size_t i=0; i<10; i++) {
+        ll1.insert(i, i);
+    }
     
+     
+    
+    ll1.print();
+
     
     //Fyller två länkade listor med 100 tal.
     for (int i = 0; i < 100; i++) {
-        ll1.push_back( ll1.back() + rand()% 20);
+        ll1.push_back(ll1.back() + rand()% 20);
         ll2.push_back(ll2.back() + rand()% 20);
     }
     
@@ -57,6 +64,10 @@ int main() {
     ll4.merge(ll1, ll2);
 
     ll4.print();
-
+    
+    
+    //Skriv programkod som kontrollerar att listans element faktiskt ligger i ordning.
+    
+    ll4.isSorted();
     return 0;
 }

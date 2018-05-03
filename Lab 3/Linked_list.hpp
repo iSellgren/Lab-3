@@ -23,7 +23,8 @@ public:
    /**/ linked_list& operator+=(const linked_list& rhs);
     
     // inserting elements
-   /* Har användt mig av operator [] *//* void insert(double value , size_t pos);*/
+   /* Har användt mig av operator [] */
+    void insert(double value , size_t pos);
     // in front
   /**/ void push_front(double value);
     // in back
@@ -49,8 +50,11 @@ public:
     // output
    /**/ void print() const;
    /**/ void print_reverse() const;
+    
     //merge
-    void merge(linked_list list1, linked_list list2);
+    linked_list merge(linked_list list1, linked_list list2);
+    
+    bool isSorted() const;
     
 private: struct node_t{
     node_t(double value, node_t* next=0, node_t* prev=0)
