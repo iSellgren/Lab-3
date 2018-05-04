@@ -7,12 +7,14 @@
 //
 
 #include "Linked_list.hpp"
-using namespace std;
+
 //Constructor
 linked_list::linked_list(const linked_list& src)
 {
-    *this = src;
+    *this += src;
+    
 }
+
 //Destructor som förstör element
 linked_list::~linked_list()
 {
@@ -28,7 +30,7 @@ linked_list::~linked_list()
 linked_list& linked_list::operator=(const linked_list& rhs)
 {
     node_t* iterator = rhs.head;
-    if(this == &rhs)
+    if(this == &rhs) // om listan har exakt lika låt dom vara.
         return *this;
     while(!is_empty()) pop_back();
     while (iterator) {
@@ -53,10 +55,8 @@ linked_list& linked_list::operator+=(const linked_list& rhs)
 
 void linked_list::insert(double value, size_t pos)
 {
-    
     node_t *NewNode = new node_t(value);
     node_t *temp;
-    NewNode->value = value;
     
     if (head != NULL)
     {
@@ -64,45 +64,43 @@ void linked_list::insert(double value, size_t pos)
         
         if (pos < 1) // Om pos är mindre än 1.
         {
-            temp= head;
-            head = NewNode;
-            head->next = temp;
-            temp->prev = head;
-            head->prev = NULL;
+            push_front(value);
         }
-        else
+        else if (pos <= size())
         {
             for (size_t i = 0; i < pos; i++) // letar sig fram till positionen.
             {
-                if (temp->next != NULL)
-                {
-                    temp = temp->next; // sätt temp1 till temp1->next;
-                }
-                else
-                {
-                    break;
-                }
+                temp = temp->next;
             }
-            
-            NewNode->prev = temp->prev; 
-            NewNode->next = temp;
-            temp->prev = NewNode;
-            NewNode->prev->next = NewNode;
-            temp = NewNode->next;
-            
-            if (temp != NULL)
-            {
+            if (temp == NULL) {
+                push_back(value);
+            }
+            else{
+                NewNode->prev = temp->prev;
+                NewNode->next = temp;
+                temp->prev = NewNode;
+                NewNode->prev->next = NewNode;
+                temp = NewNode->next;
                 temp->prev = NewNode;
             }
             
         }
+        else if (pos > size()) // om pos är större än size så är man out of bounce
+            {
+                std::cerr << "Out of bounds" << std::endl;
+                return;
+            }
         if (tail->next != NULL)
             tail = tail->next;
         
     }
+    else if (pos == 0)
+    {
+        push_front(value);
+    }
     else // Om Head är tomt och man vill sätta något på annan pos.
     {
-        std::cerr << "Det finns inget på pos 0" << std:: endl;
+        std::cerr << "Listan saknar element" << std:: endl;
         
     }
 }
@@ -139,7 +137,7 @@ void linked_list::push_front(double value)
 double linked_list::pop_back()
 {
     double value;
-   node_t* tmp = tail->prev; // Skapar en temorär node som går till näst sista värdet.
+   node_t* tmp = tail->prev; // Skapar en temporär node som pekar på näst sista värdet.
     if(tmp)
     {
         tmp->next = nullptr; // tmp där next är nullptr
@@ -160,7 +158,7 @@ double linked_list::pop_back()
 double linked_list::pop_front()
 {
     double value;
-    node_t* tmp = head->next; // Skapar en temporär node som går till värdet bakom head.
+    node_t* tmp = head->next; // Skapar en temporär node som pekar på värdet bakom head.
     if(tmp)
     {
         tmp->prev = nullptr; // tmp går dit prev är nullptr
@@ -273,7 +271,7 @@ void linked_list::print() const
     node_t* iterator = head;
     while (iterator) {
         std::cout << iterator->value << "\n"; // skriv ut value
-        iterator = iterator->next; // iterator till nästa värde
+        iterator = iterator->next; // iterator pekar på nästa värde
     }
 }
 // Börjar från tail och skriver ut allt backifrån
@@ -282,7 +280,7 @@ void linked_list::print_reverse() const
     node_t* iterator = tail;
     while (iterator) {
         std::cout << iterator->value << "\n"; // skriv ut value
-        iterator = iterator->prev; // iterator till föregående värde eftersom vi går bakvägen
+        iterator = iterator->prev; // iterator pekar på föregående värde eftersom vi går bakvägen
     }
 }
 
