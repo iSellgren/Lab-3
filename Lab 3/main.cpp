@@ -13,33 +13,29 @@
 int main() {
     linked_list ll1;
     linked_list ll2;
-    for (size_t i=0; i<10; i++) {
-        ll1.insert(i, i);
-    }
     
-     
     
-    ll1.print();
-
     
     //Fyller två länkade listor med 100 tal.
     for (int i = 0; i < 100; i++) {
         ll1.push_back(ll1.back() + rand()% 20);
         ll2.push_back(ll2.back() + rand()% 20);
+        
+        
     }
     
     //Kollar vilken av de länkade listorna som har störst värde och tar sedan bort det största
-    if( ll1.operator[](50) > ll2.operator[](50) ){
+    if( ll1.at(50) > ll2.at(50) ){
         std::cout << "First list holds the bigger value" << std::endl;
         ll1.remove(50);
     }
-    else if ( ll1.operator[](50) == ll2.operator[](50) )
+    else if ( ll1.at(50) == ll2.at(50) )
     {
         std::cout << "Both values in the list are equals" << std::endl;
     }
     else
     {
-        std::cout << "First list holds the bigger value" << std::endl;
+        std::cout << "Second list holds the bigger value" << std::endl;
         ll2.remove(50);
     }
     
@@ -69,5 +65,7 @@ int main() {
     //Skriv programkod som kontrollerar att listans element faktiskt ligger i ordning.
     
     ll4.isSorted();
+    
+    std::cout << ll4.size() << std::endl;
     return 0;
 }

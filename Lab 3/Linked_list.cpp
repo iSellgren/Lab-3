@@ -21,7 +21,7 @@ linked_list::~linked_list()
         node_t *next = iterator->next;
         delete iterator;
         iterator = next;
-        //std::cout << "I Killed a element " << std::endl;
+        //std::cout << "Siri Killed a element " << std::endl;
     }
 }
 
@@ -35,57 +35,85 @@ linked_list& linked_list::operator=(const linked_list& rhs)
         push_back(iterator->value);
         iterator = iterator->next;
     }
-    return *this;
+    return *this; //return *this -> return värdet by reference
 }
 
 linked_list& linked_list::operator+=(const linked_list& rhs)
 {
     node_t* iterator = rhs.head;
-    while (iterator) {
-        push_back(iterator->value);
+    while (iterator) { //
+        push_back(iterator->value); // bygger ut listan med den andra listan.
         iterator = iterator->next;
     }
     
-    return *this;
+    return *this; //return *this -> return värdet by reference
 }
 
 // inserting elements
 
 void linked_list::insert(double value, size_t pos)
 {
-    node_t* tmp = new node_t(value);
-    node_t* iterator = new node_t(value);
-    if (is_empty()) {
-        head = tail = tmp;
-    }
+    
+    node_t *NewNode = new node_t(value);
+    node_t *temp;
+    NewNode->value = value;
     
     if (head != NULL)
     {
-        for (size_t i = 0; i < pos; i++)
-        {
-            iterator = iterator->next;
-        }
+        temp = head; // sätt
         
-        if (iterator->next != NULL)
+        if (pos < 1) // Om pos är mindre än 1.
         {
-            tmp = iterator->next;
-            tmp->prev = iterator->prev;
+            temp= head;
+            head = NewNode;
+            head->next = temp;
+            temp->prev = head;
+            head->prev = NULL;
         }
-        delete iterator;
-        
+        else
+        {
+            for (size_t i = 0; i < pos; i++) // letar sig fram till positionen.
+            {
+                if (temp->next != NULL)
+                {
+                    temp = temp->next; // sätt temp1 till temp1->next;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            
+            NewNode->prev = temp->prev; 
+            NewNode->next = temp;
+            temp->prev = NewNode;
+            NewNode->prev->next = NewNode;
+            temp = NewNode->next;
+            
+            if (temp != NULL)
+            {
+                temp->prev = NewNode;
+            }
+            
+        }
+        if (tail->next != NULL)
+            tail = tail->next;
         
     }
-    
+    else // Om Head är tomt och man vill sätta något på annan pos.
+    {
+        std::cerr << "Det finns inget på pos 0" << std:: endl;
+        
+    }
 }
-
 void linked_list::push_back(double value)
 {
-    if (!(head && tail)) {
+    if (!(head && tail)) { // om Head och tail inte finns så sätt värdet till head och tail
        node_t* tmp = new node_t(value);
         head = tail = tmp;
     }else
     {
-        node_t* tmp = new node_t(value);
+        node_t* tmp = new node_t(value); // bygger på tail.
         tail->next = tmp;
         tmp->prev = tail;
         tail = tmp;
@@ -94,12 +122,12 @@ void linked_list::push_back(double value)
 
 void linked_list::push_front(double value)
 {
-    if(!(head && tail)){
+    if(!(head && tail)){ // om Head och tail inte finns så sätt värdet till head och tail
         node_t* tmp = new node_t(value);
         head = tail = tmp;
     }else
     {
-        node_t* tmp = new node_t(value);
+        node_t* tmp = new node_t(value); // bygger på head
         head->prev = tmp;
         tmp->next = head;
         head = tmp;
@@ -143,7 +171,7 @@ double linked_list::pop_front()
     {
         value = head->value; // value tar heads värde
         delete head;
-        head = tail = nullptr; // sätter allt till nullptr
+        head = tail = nullptr; // sätter allt till nullptr xD
     }
     return value;
 }
@@ -154,7 +182,7 @@ double linked_list::front() const
     
     if (head != NULL)
     {
-        return head->value; // petar till heads värde
+        return head->value; // visar värdet på head
     }
     else
     {
@@ -168,7 +196,7 @@ double linked_list::back() const
     
     if (tail != NULL)
     {
-        return tail->value; // petar till tails värde
+        return tail->value; // vistar värdet på tail
     }
     else
     {
@@ -176,7 +204,7 @@ double linked_list::back() const
     }
 }
 
-double & linked_list::operator[](size_t pos)
+double linked_list::at(size_t pos) const
 {
     node_t *iterator = head;
     for (size_t i = 0; i < pos; i++) { // Loppar antal gånger som efterfrågas
@@ -201,7 +229,7 @@ void linked_list::remove (size_t pos)
             iterator = iterator->next;
         }
         
-        if (iterator->prev != NULL) // om prev inte är NULL
+        if (iterator->prev != NULL)
         {
             tmp = iterator->prev;
             tmp->next = iterator->next;
@@ -219,10 +247,10 @@ void linked_list::remove (size_t pos)
 }
 
 // informational
-// kollar om huvudet är en nullptr
+
 bool linked_list::is_empty() const
 {
-    return head == nullptr;
+    return head == nullptr; // kollar om huvudet är en nullptr isåfall är den tom.
 }
 
 //en count som räknar varje steg till slutet av listan
@@ -232,8 +260,8 @@ size_t linked_list::size() const
     node_t* iterator = head;
     while(iterator)
     {
-        iterator = iterator->next;
-        ++count;
+        iterator = iterator->next; // ta iterator till nästa värde
+        ++count; // räkna antal gånger iterator finns.
     }
     return count;
 }
@@ -244,8 +272,8 @@ void linked_list::print() const
 {
     node_t* iterator = head;
     while (iterator) {
-        std::cout << iterator->value << "\n";
-        iterator = iterator->next;
+        std::cout << iterator->value << "\n"; // skriv ut value
+        iterator = iterator->next; // iterator till nästa värde
     }
 }
 // Börjar från tail och skriver ut allt backifrån
@@ -253,8 +281,8 @@ void linked_list::print_reverse() const
 {
     node_t* iterator = tail;
     while (iterator) {
-        std::cout << iterator->value << "\n";
-        iterator = iterator->prev;
+        std::cout << iterator->value << "\n"; // skriv ut value
+        iterator = iterator->prev; // iterator till föregående värde eftersom vi går bakvägen
     }
 }
 
@@ -279,7 +307,7 @@ linked_list linked_list::merge(linked_list list1, linked_list list2)
             list1.front();
             
         }
-        // Om värdet på head2 är lägre stoppa in värdet i tmp
+        // Om värdet i head2 är lägre stoppa in värdet i tmp
         else if (head1->value > head2->value)
         {
         
@@ -307,6 +335,7 @@ linked_list linked_list::merge(linked_list list1, linked_list list2)
         list1.pop_front();
         list1.front();
     }
+    //return tmp listan.
     return operator=(tmp);
 }
 

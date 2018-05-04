@@ -23,7 +23,6 @@ public:
    /**/ linked_list& operator+=(const linked_list& rhs);
     
     // inserting elements
-   /* Har användt mig av operator [] */
     void insert(double value , size_t pos);
     // in front
   /**/ void push_front(double value);
@@ -34,7 +33,7 @@ public:
     // accessing elements
     /**/ double front() const;
    /**/ double back() const;
-    /**/ double & operator[](size_t pos);
+    /**/ double at(size_t pos) const;
     
     // removing elements
     void remove (size_t pos);
